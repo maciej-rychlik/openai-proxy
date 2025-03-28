@@ -18,23 +18,23 @@ app.use(express.json());
 app.post('/openai', async (req, res) => {
   try {
     const response = await axios.post(
-      'https://api.openai.com/v1/chat/completions',
+      'https://ai-gateway.mycompany.com/v1/chat/completions', // <-- your real internal endpoint here
       req.body,
       {
         headers: {
-          'Authorization': `Bearer ${process.env.OPENAI_API_KEY}`,
+          'Authorization': `Bearer ${process.env.OPENAI_API_KEY}`, // your custom company key
           'Content-Type': 'application/json',
         },
       }
     );
     res.json(response.data);
   } catch (error) {
-    console.error('OpenAI error:', error.response?.data || error.message); // <-- Better logging
+    console.error('OpenAI error:', error.response?.data || error.message);
     res.status(500).json({ error: 'OpenAI request failed' });
   }
 });
 
-// Optional health check route
+// Optional: health check route
 app.get('/', (req, res) => {
   res.send('Proxy is alive!');
 });
