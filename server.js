@@ -18,7 +18,7 @@ app.use(express.json());
 app.post('/openai', async (req, res) => {
   try {
     const response = await axios.post(
-      'https://ai-gateway.zende.sk/v1/chat/completions', // <-- your real internal endpoint here
+      'https://ai-gateway.zende.sk', // <-- your real internal endpoint here
       req.body,
       {
         headers: {
