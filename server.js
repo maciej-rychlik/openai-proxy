@@ -6,7 +6,13 @@ require('dotenv').config();
 const app = express();
 const port = process.env.PORT || 3000;
 
-app.use(cors());
+// Allow CORS from any origin (for Godot HTML5)
+app.use(cors({
+  origin: '*',
+  methods: ['POST', 'GET'],
+  allowedHeaders: ['Content-Type']
+}));
+
 app.use(express.json());
 
 app.post('/openai', async (req, res) => {
@@ -23,11 +29,16 @@ app.post('/openai', async (req, res) => {
     );
     res.json(response.data);
   } catch (error) {
-    console.error(error.response?.data || error.message);
+    console.error('OpenAI error:', error.response?.data || error.message); // <-- Better logging
     res.status(500).json({ error: 'OpenAI request failed' });
   }
 });
 
+// Optional health check route
+app.get('/', (req, res) => {
+  res.send('Proxy is alive!');
+});
+
 app.listen(port, () => {
-  console.log(`Proxy running at http://localhost:${port}`);
+  console.log(`Proxy running on port ${port}`);
 });
